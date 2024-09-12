@@ -3,6 +3,8 @@ import { defineConfig } from '@tarojs/cli'
 import devConfig from './dev'
 import prodConfig from './prod'
 import vitePluginImp from 'vite-plugin-imp'
+const { UnifiedWebpackPluginV5 } = require('weapp-tailwindcss/webpack')
+
 // https://taro-docs.jd.com/docs/next/config#defineconfig-辅助函数
 export default defineConfig(async (merge, { command, mode }) => {
   const baseConfig = {
@@ -51,7 +53,27 @@ export default defineConfig(async (merge, { command, mode }) => {
             namingPattern: 'module', // 转换模式，取值为 global/module
             generateScopedName: '[name]__[local]___[hash:base64:5]'
           }
-        }
+        },
+        htmltransform: {
+          enable: true,
+          // 设置成 false 表示 不去除 * 相关的选择器区块
+          // 假如开启这个配置，它会把 tailwindcss 整个 css var 的区域块直接去除掉
+          config: {
+            removeCursorStyle: false,
+          },
+        },
+      },
+      webpackChain(chain, webpack) {
+        chain.merge({
+          plugin: {
+            install: {
+              plugin: UnifiedWebpackPluginV5,
+              args: [{
+                appType: 'taro'
+              }]
+            }
+          }
+        })
       }
     },
     h5: {

@@ -26,7 +26,7 @@ function Index() {
   return (
     <ConfigProvider locale={locale}>
       <View className='nutui-react-demo'>
-        <View className='block'>hello world</View>
+        <View className='flex justify-center bg-red-400 text-white w-24 h-24 items-center rounded-lg text-3xl'>hello world</View>
       </View>
     </ConfigProvider>
   )
